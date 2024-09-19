@@ -35,8 +35,9 @@ when ACCESS_PER_REQUEST_AGENT_EVENT priority 100 {
 
         # This is only used for logging
         if { $static::debug } {set path [HTTP::path]}
-
-        HTTP::header insert "Authorization" [ACCESS::session data get -secure "session.custom.userdata.jwt"]
+        
+        set userdatajwt [ACCESS::session data get -secure "session.custom.userdata.jwt"]
+        HTTP::header insert "Authorization" "Bearer $userdatajwt"
         if { $static::debug } {log local0. "Adding JWT ([string range [ACCESS::session data get -secure "session.custom.userdata.jwt"] 0 15]) to Authorization header on $path"}
     }
 }
